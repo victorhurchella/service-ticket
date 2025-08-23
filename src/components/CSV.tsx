@@ -46,11 +46,13 @@ export function CsvPage() {
     setError(null);
   }
 
-  async function handleImport() {
-    if (!processedCsv) return;
+  async function handleImport(f?: File) {
+    const file = f || processedCsv;
 
-    const file = new File([processedCsv], "processed.csv");
-    await importProcessed(file);
+    if (!file) return;
+
+    const fileToImport = new File([file], "processed.csv");
+    await importProcessed(fileToImport);
 
     setError(null);
   }
@@ -60,19 +62,36 @@ export function CsvPage() {
       <h2>CSV</h2>
 
       <S.RowData>
-        <S.Button onClick={handleExport}>Export Pending</S.Button>
+        <S.Button onClick={handleExport}>Export Pending Tickets</S.Button>
 
         <S.Button
           variant="secondary"
           disabled={!pendingCsv}
           onClick={() => handleAutoProcess()}
         >
-          Auto-Process (last export)
+          Auto-Process 33/33/34 (last export)
         </S.Button>
 
-        <S.Button onClick={handleImport} disabled={!processedCsv}>
-          Import Auto-Processed
+        <S.Button onClick={() => handleImport()} disabled={!processedCsv}>
+          Import - Auto Processed
         </S.Button>
+      </S.RowData>
+
+      <S.RowData style={{ paddingTop: "16px" }}>
+        <label>
+          <input
+            type="file"
+            accept=".csv"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) handleImport(f);
+            }}
+          />
+          <S.Button as="span" variant="secondary">
+            Import Manually Processed CSV
+          </S.Button>
+        </label>
       </S.RowData>
 
       {(isPendingExport ||
