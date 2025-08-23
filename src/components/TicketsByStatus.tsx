@@ -25,24 +25,25 @@ export function TicketsByStatus() {
   const { mutate: softDeleteTicket } = useSoftDeleteTicket();
 
   async function onChangeSeverity(ticketId: string, currentSeverity: Severity) {
-    const options: Severity[] = ["EASY", "LOW", "MEDIUM", "HIGH", "VERY_HIGH"];
-    let newSeverity: string | null;
+    const options = ["EASY", "LOW", "MEDIUM", "HIGH", "VERY_HIGH"];
 
-    do {
-      newSeverity = prompt(
-        `New Severity: ${options.join(", ")}`,
-        currentSeverity,
-      );
-    } while (!newSeverity || !options.includes(newSeverity as Severity));
+    const newSeverity = prompt(
+      `New Severity: ${options.join(", ")}`,
+      currentSeverity,
+    );
 
-    const severityChangeReason = prompt(`Reason to change severity:`);
+    if (!newSeverity) return;
 
-    if (!newSeverity || !severityChangeReason) return;
+    const validNewSeverity = options.includes(newSeverity.toUpperCase());
+
+    const severityChangeReason = prompt("Reason to change severity:");
+
+    if (!validNewSeverity || !severityChangeReason) return;
 
     try {
       const ticket = await changeSeverity({
         id: ticketId,
-        newSeverity: newSeverity as Severity,
+        newSeverity: newSeverity.toUpperCase() as Severity,
         severityChangeReason,
       });
 
