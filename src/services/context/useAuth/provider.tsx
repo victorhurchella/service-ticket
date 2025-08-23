@@ -20,16 +20,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [user]);
 
-  const login = useCallback(async (payload: ILogin) => {
-    const { access_token, user } = await postLogin(payload);
+  const login = useCallback(
+    async (payload: ILogin) => {
+      const { access_token, user } = await postLogin(payload);
 
-    localStorage.setItem("token", access_token);
-    localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", access_token);
+      localStorage.setItem("user", JSON.stringify(user));
 
-    setUser(user);
+      setUser(user);
 
-    return;
-  }, []);
+      return;
+    },
+    [postLogin],
+  );
 
   const logout = useCallback(async () => {
     localStorage.removeItem("token");
