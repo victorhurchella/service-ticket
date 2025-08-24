@@ -56,31 +56,37 @@ export function TicketView({ ticket, close }: IModalProps) {
               </tr>
             </thead>
             <tbody>
-              {ticketHistory?.map((history) => (
-                <tr key={history.id}>
-                  <td>{history.fromStatus ?? "-"}</td>
-                  <td>{history.toStatus ?? "-"}</td>
-                  <td
-                    style={{
-                      color: history.fromSeverity
-                        ? colorBySeverity(history.fromSeverity)
-                        : "#eee",
-                    }}
-                  >
-                    {history.fromSeverity ?? "-"}
-                  </td>
-                  <td
-                    style={{
-                      color: history.toSeverity
-                        ? colorBySeverity(history.toSeverity)
-                        : "#eee",
-                    }}
-                  >
-                    {history.toSeverity ?? "-"}
-                  </td>
-                  <td>{history.reason}</td>
-                </tr>
-              ))}
+              {ticketHistory
+                ?.sort(
+                  (a, b) =>
+                    new Date(a.createdAt).getTime() -
+                    new Date(b.createdAt).getTime(),
+                )
+                .map((history) => (
+                  <tr key={history.id}>
+                    <td>{history.fromStatus ?? "-"}</td>
+                    <td>{history.toStatus ?? "-"}</td>
+                    <td
+                      style={{
+                        color: history.fromSeverity
+                          ? colorBySeverity(history.fromSeverity)
+                          : "#eee",
+                      }}
+                    >
+                      {history.fromSeverity ?? "-"}
+                    </td>
+                    <td
+                      style={{
+                        color: history.toSeverity
+                          ? colorBySeverity(history.toSeverity)
+                          : "#eee",
+                      }}
+                    >
+                      {history.toSeverity ?? "-"}
+                    </td>
+                    <td>{history.reason}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </S.HistoryContainer>
