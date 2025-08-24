@@ -32,3 +32,15 @@ export function downloadCsv(blob: Blob, filename: string) {
   a.remove();
   URL.revokeObjectURL(url);
 }
+
+export function colorBySeverity(severity: string) {
+  const mappedColors: Record<string, string> = {
+    EASY: "lightgreen",
+    LOW: "green",
+    MEDIUM: "yellow",
+    HIGH: "orange",
+    VERY_HIGH: "red",
+  };
+
+  return mappedColors[severity];
+}

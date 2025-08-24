@@ -2,6 +2,7 @@ import { queryClient } from "@/services/api";
 import type { Status } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  getTicketHistory,
   getTicketsByStatus,
   patchApproveTicket,
   patchChangeSeverity,
@@ -66,6 +67,16 @@ export function useSoftDeleteTicket() {
     {
       mutationFn: (id: string) => softDeleteTicket(id),
       onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tickets"] }),
+    },
+    queryClient,
+  );
+}
+
+export function useGetTicketHistory(ticketId: string) {
+  return useQuery(
+    {
+      queryKey: [`ticket-history-${ticketId}`],
+      queryFn: () => getTicketHistory(ticketId),
     },
     queryClient,
   );

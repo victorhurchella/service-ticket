@@ -1,6 +1,11 @@
 import { api } from "@/services/api";
 import type { Paginated, Status, Ticket } from "@/types";
-import type { IChangeSeverity, ICreateTicket, IUpdateInReview } from "./types";
+import type {
+  IChangeSeverity,
+  ICreateTicket,
+  ITicketHistory,
+  IUpdateInReview,
+} from "./types";
 
 export async function getTicketsByStatus(status: Status) {
   const { data } = await api.get<Paginated<Ticket>>(
@@ -41,5 +46,12 @@ export async function patchUpdateInReview(payload: IUpdateInReview) {
 
 export async function softDeleteTicket(id: string) {
   const { data } = await api.delete<Ticket>(`/tickets/${id}`);
+  return data;
+}
+
+export async function getTicketHistory(id: string) {
+  const { data } = await api.get<Array<ITicketHistory>>(
+    `/tickets/${id}/history`,
+  );
   return data;
 }

@@ -7,10 +7,14 @@ import {
   useUpdateInReview,
 } from "@/services/hooks/tickets";
 import { useNavigate, useParams } from "@tanstack/react-router";
+import { useState } from "react";
 import { Badge, Button, Card, Table } from "../styles/ui";
 import type { Severity, Status, TAxiosMessageError, Ticket } from "../types";
+import { TicketView } from "./TicketView";
 
 export function TicketsByStatus() {
+  const [viewTicket, setViewTicket] = useState<Ticket | null>();
+
   const { status } = useParams({ from: "/tickets/$status" }) as {
     status: Status;
   };
@@ -101,6 +105,10 @@ export function TicketsByStatus() {
                   <td>{new Date(ticket.dueDate).toLocaleString()}</td>
                   <td>
                     <div style={{ display: "flex", gap: 8 }}>
+                      <Button onClick={() => setViewTicket(ticket)}>
+                        View
+                      </Button>
+
                       {user.role === "MANAGER" && status === "DRAFT" && (
                         <>
                           <Button
@@ -142,6 +150,10 @@ export function TicketsByStatus() {
           </tbody>
         </Table>
       </Card>
+
+      {viewTicket && (
+        <TicketView ticket={viewTicket} close={() => setViewTicket(null)} />
+      )}
     </div>
   );
 }
